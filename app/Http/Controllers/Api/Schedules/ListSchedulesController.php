@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Http\Controllers\Api\Schedules;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\Schedules\ListScheduleResource;
+use App\Models\Schedule;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+
+class ListSchedulesController extends Controller
+{
+    public function __invoke(Request $request)
+    {
+        $date = $request->day ? Carbon::createFromFormat('Y-m-d', $request->day) : now();
+
+        $request['isToday'] = $date->isToday();
+        $request['hour'] = $date->addHour(1)->format('H:i');
+        $request['day'] = $date->format('Y-m-d');
+
+        $dayOfWeek = $date->dayOfWeek;
+
+        if ($date->isPast()) {
+            return response()->json(['data' => []]);
+        }
+        $schedules = Schedule::with(['checkins'], function ($query) use ($date) {
+            return $query->where('checkins.canceled_at', null)->where('checkins.checkin_date', $date->format('Y-m-d'));
+        })
+            ->where('day_of_week', $dayOfWeek)->get();
+
+        $isEvent = $schedules->whereNotNull('event_date');
+
+        if ($isEvent->count() > 0) {
+            return ListScheduleResource::collection($isEvent);
+        }
+
+        $schedules = $schedules->whereNull('event_date')->all();
+
+        return ListScheduleResource::collection($schedules);
+    }
+}
