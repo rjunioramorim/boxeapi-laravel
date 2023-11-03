@@ -21,7 +21,7 @@ class ListCheckinsController extends Controller
         $checkins = Checkin::with('schedule')
             ->where('client_id', $clientId)
             ->where('checkin_date', '>=', $day->format('Y-m-d'))
-            ->where('canceled_at', null)
+            // ->where('canceled_at', null)
             // ->where('confirmed_at', null)
             // ->where(function($query) use ($day) {
             //     $query->where('checkin_date', '>', $day->format('Y-m-d'))
