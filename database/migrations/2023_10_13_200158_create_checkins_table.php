@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('hour', 5);
             $table->datetime('canceled_at')->nullable();
             $table->datetime('confirmed_at')->nullable();
+            $table->datetime('realized_at')->nullable();
             $table->timestamps();
         });
     }

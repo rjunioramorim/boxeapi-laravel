@@ -14,6 +14,8 @@ class ListCheckinsController extends Controller
     {
         $day = $request->day == null ? now() : Carbon::createFromFormat('Y-m-d', $request->day);
 
+        optional(Checkin::whereDate('checkin_date', $day->format('Y-m-d'))->where('canceled_at', null)->where('hour', '<=', $day->format('H:i'))->update(['realized_at' => $day]));
+
         $clientId = auth()->user()->client->id;
 
         $checkins = Checkin::with('schedule')
