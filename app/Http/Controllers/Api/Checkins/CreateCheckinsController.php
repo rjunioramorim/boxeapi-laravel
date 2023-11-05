@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Checkins;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Checkins\CreateCheckinRequest;
+use App\Http\Resources\Checkins\CreateCheckinsResource;
 use App\Models\Checkin;
 use App\Models\Schedule;
 use Carbon\Carbon;
@@ -46,6 +47,7 @@ class CreateCheckinsController extends Controller
         $data['client_id'] = $clientId;
         $checkin = Checkin::create($data);
 
-        return response()->json(['data' => $checkin], 201);
+        return new CreateCheckinsResource($checkin);
+        // return response()->json(['data' => $checkin], 201);
     }
 }
