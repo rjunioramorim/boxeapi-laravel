@@ -14,14 +14,27 @@ class DetailScheduleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // dd($request->all());
-        $request->day;
+        $open = ($request->isToday && $this->hour > $request->hour) || (!$request->isToday);
+
         return [
+            'id' => $this->id,
             'day' => $request->day,
             'hour' => $this->hour,
+            'professor' => $this->professor,
+            'description' => $this->description,
+            'checkins' => $this->checkins->where('canceled_at', null)->count(),
+            'open' => $open,
             'limit' => $this->limit,
-            'checkins' => $this->checkins->count(),
             'clients' => DetailClientScheduleResource::collection($this->checkins),
         ];
+        // dd($request->all());
+        // $request->day;
+        // return [
+        //     'day' => $request->day,
+        //     'hour' => $this->hour,
+        //     'limit' => $this->limit,
+        //     'checkins' => $this->checkins->count(),
+        //     'clients' => DetailClientScheduleResource::collection($this->checkins),
+        // ];
     }
 }

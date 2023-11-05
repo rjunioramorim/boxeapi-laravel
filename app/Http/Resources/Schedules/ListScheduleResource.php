@@ -26,6 +26,7 @@ class ListScheduleResource extends JsonResource
             'checkins' => $this->checkins->where('canceled_at', null)->count(),
             'open' => $open,
             'limit' => $this->limit,
+            'clients' => DetailClientScheduleResource::collection($this->whenLoaded('checkins')),
         ];
     }
 }
