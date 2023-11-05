@@ -14,8 +14,8 @@ class DetailSchedulesController extends Controller
         $day = $request->day;
         $schedule = Schedule::with(['checkins.client.user'], function ($query) use ($day) {
             return $query->where('checkins.checkin_date', $day)->where('checkins.canceled_at', null);
-        })->where('id', $schedule->id)->get();
+        })->where('id', $schedule->id)->first();
 
-        return DetailScheduleResource::collection($schedule);
+        return new DetailScheduleResource($schedule);
     }
 }

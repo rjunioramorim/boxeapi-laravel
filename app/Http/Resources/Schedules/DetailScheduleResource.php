@@ -14,9 +14,12 @@ class DetailScheduleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // dd($request->all());
+        $request->day;
         return [
-            'day' => '2023-09-11',
+            'day' => $request->day,
             'hour' => $this->hour,
+            'limit' => $this->limit,
             'checkins' => $this->checkins->count(),
             'clients' => DetailClientScheduleResource::collection($this->checkins),
         ];

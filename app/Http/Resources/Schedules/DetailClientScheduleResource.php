@@ -18,7 +18,7 @@ class DetailClientScheduleResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'avatar_url' => $this->client->user->avatar_url,
+            'avatar_url' => url($this->client->user->avatar_url),
             'name' => $this->client->user->name,
             'checked' => $this->client->user_id == $userId,
         ];
