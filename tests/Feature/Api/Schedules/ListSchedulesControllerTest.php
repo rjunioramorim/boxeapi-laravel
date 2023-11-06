@@ -73,6 +73,54 @@ test('não deve lista os horários de aula do dia se a data for anterior ao dia 
     $response->assertStatus(200);
 });
 
+test('lista os horários de aula do dia com a confirmação do checkind do usuário logado', function () {
+    $user = login();
+    Carbon::setTestNow(Carbon::create(2023, 9, 11, 10, 15));
+    $today = now();
+    Schedule::factory()->has(Checkin::factory(['hour' => '17:00']))
+        ->create(['day_of_week' => 1, 'hour' => '17:00', 'description' => 'Aula de boxe']);
+
+    Schedule::factory()
+        ->has(Checkin::factory(['hour' => '18:00', 'confirmed_at' => $today, 'client_id' => $user->client->id]))
+        ->has(Checkin::factory(['hour' => '18:00']))
+        ->create(['day_of_week' => 1, 'hour' => '18:00', 'description' => 'Aula de boxe']);
+
+
+    $response = $this->getJson('/api/schedules?day=2023-09-11');
+    $data =  [
+        'data' => [
+            [
+                'id' => 1,
+                'day' => $today->format('Y-m-d'),
+                'hour' => '17:00',
+                'description' => 'Aula de boxe',
+                'professor' => 'Prof: India',
+                'checkins' => 1,
+                'open' => true,
+                'checked' => false,
+                'confirmed' => null
+            ],
+            [
+                'id' => 2,
+                'day' => $today->format('Y-m-d'),
+                'hour' => '18:00',
+                'description' => 'Aula de boxe',
+                'professor' => 'Prof: India',
+                'checkins' => 2,
+                'open' => true,
+                'checked' => true,
+                'confirmed' => $today->format('Y-m-d H:i:s')
+
+            ],
+        ],
+    ];
+    $response->assertJson($data);
+
+    $response->assertStatus(200);
+    Carbon::setTestNow();
+});
+
+
 
 function factorySchedules()
 {
@@ -83,7 +131,7 @@ function factorySchedules()
         ->create(['day_of_week' => 1, 'hour' => '17:00', 'description' => 'Aula de boxe']);
 
     Schedule::factory()
-        ->has(Checkin::factory(['hour' => '18:00', 'client_id' => $user->client->id]))
+        ->has(Checkin::factory(['hour' => '18:00', 'confirmed_at' => now(), 'client_id' => $user->client->id]))
         ->has(Checkin::factory(['hour' => '18:00']))
         ->create(['day_of_week' => 1, 'hour' => '18:00', 'description' => 'Aula de boxe']);
 

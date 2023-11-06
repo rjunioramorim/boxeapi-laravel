@@ -27,7 +27,7 @@ class ListScheduleResource extends JsonResource
             'open' => $open,
             'limit' => $this->limit,
             'checked' => $this->checked,
-            'status' => $this->status,
+            'confirmed' => $this->confirmed,
         ];
     }
 }

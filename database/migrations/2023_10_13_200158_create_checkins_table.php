@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('schedule_id')->references('id')->on('schedules');
             $table->date('checkin_date');
             $table->string('hour', 5);
-            $table->string('status')->nullable();
             $table->datetime('canceled_at')->nullable();
             $table->datetime('confirmed_at')->nullable();
             $table->datetime('realized_at')->nullable();
