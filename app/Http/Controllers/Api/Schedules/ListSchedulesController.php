@@ -30,7 +30,7 @@ class ListSchedulesController extends Controller
         $clientId = auth()->user()->client->id;
         $schedules->each(function($schedule) use($clientId) { 
             $schedule->checked = $schedule->checkins->contains('client_id', $clientId );
-            $schedule->status = $schedule->checkins->where('client_id', $clientId)->pluck('status')->first();
+            $schedule->status = $schedule->checkins->where('client_id', $clientId)->pluck('status')->last();
         });
 
         
