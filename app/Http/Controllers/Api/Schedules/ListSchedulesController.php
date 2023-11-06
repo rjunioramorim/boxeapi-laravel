@@ -15,7 +15,7 @@ class ListSchedulesController extends Controller
         $date = $request->day ? Carbon::createFromFormat('Y-m-d', $request->day) : now();
 
         $request['isToday'] = $date->isToday();
-        $request['hour'] = $date->addHour(1)->format('H:i');
+        $request['hour'] = $date->addMinutes(10)->format('H:i');
         $request['day'] = $date->format('Y-m-d');
 
         $dayOfWeek = $date->dayOfWeek;
@@ -30,7 +30,11 @@ class ListSchedulesController extends Controller
         $clientId = auth()->user()->client->id;
         $schedules->each(function($schedule) use($clientId) { 
             $schedule->checked = $schedule->checkins->contains('client_id', $clientId );
+            $schedule->status = $schedule->checkins->where('client_id', $clientId)->pluck('status')->first();
         });
+
+        
+       
 
         $isEvent = $schedules->whereNotNull('event_date');
 

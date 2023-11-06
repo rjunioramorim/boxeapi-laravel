@@ -27,8 +27,7 @@ class ListScheduleResource extends JsonResource
             'open' => $open,
             'limit' => $this->limit,
             'checked' => $this->checked,
-            
-            // 'clients' => DetailClientScheduleResource::collection($this->whenLoaded('checkins')),
+            'status' => $this->status,
         ];
     }
 }
