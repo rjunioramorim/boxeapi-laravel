@@ -22,6 +22,7 @@ class CheckinFactory extends Factory
             'schedule_id' => '',
             'checkin_date' => now()->format('Y-m-d'),
             'hour' => '07:00',
+        
         ];
     }
 }

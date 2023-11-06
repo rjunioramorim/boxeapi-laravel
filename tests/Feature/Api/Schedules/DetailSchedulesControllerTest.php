@@ -19,9 +19,14 @@ test('deve listar todos os checkins do dia e horário', function () {
     $response->assertJson([
         'data' => [
             [
+                'id' => $schedule->id,
                 'day' => '2023-09-11',
                 'hour' => $schedule->hour,
+                'professor' => "Prof: India",
+                'description' => "Aula de Boxe Kids",
                 'checkins' => '2',
+                'open' => true,
+                'limit' => 12,
                 'clients' => [
                     [
                         'id' => $schedule->checkins[0]->client->id,

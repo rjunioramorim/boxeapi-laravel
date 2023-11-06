@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Checkins;
 
+use App\Enums\ScheduleType;
 use App\Http\Controllers\Controller;
 use App\Models\Checkin;
 
@@ -11,7 +12,6 @@ class CancelCheckinsController extends Controller
     {
         $day = now();
         $hour = $day->format('H:m');
-        // $isToday = ($day->isToday() && $checkin->hour > $hour) || (!$day->isToday());
         
         if ($checkin->checkin_date <= $day->format('Y-m-d')) {
             if ($checkin->hour <= $hour) {
@@ -24,6 +24,7 @@ class CancelCheckinsController extends Controller
         }
 
         $checkin->canceled_at = now();
+        $checkin->status = ScheduleType::CANCELED->value;
 
         $checkin->save();
 

@@ -25,8 +25,12 @@ class ListSchedulesController extends Controller
         }
         $schedules = Schedule::with(['checkins'], function ($query) use ($date) {
             return $query->where('checkins.canceled_at', null)->where('checkins.checkin_date', $date->format('Y-m-d'));
-        })
-            ->where('day_of_week', $dayOfWeek)->get();
+        })->where('day_of_week', $dayOfWeek)->get();
+
+        $clientId = auth()->user()->client->id;
+        $schedules->each(function($schedule) use($clientId) { 
+            $schedule->checked = $schedule->checkins->contains('client_id', $clientId );
+        });
 
         $isEvent = $schedules->whereNotNull('event_date');
 

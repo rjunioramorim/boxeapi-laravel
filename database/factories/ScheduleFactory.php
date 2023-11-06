@@ -22,6 +22,7 @@ class ScheduleFactory extends Factory
             'active' => true,
             'professor' => 'Prof: India',
             'event_date' => null,
+            
         ];
     }
 }
