@@ -21,10 +21,9 @@ class ListCheckinsResource extends JsonResource
             'day' => $this->checkin_date,
             'description' => $this->schedule->description,
             'professor' => $this->schedule->professor,
-            'status' => $this->status,
-            // 'confirmed_at' => $this->confirmed_at,
+            'confirmed_at' => $this->confirmed_at,
             // 'realized_at' => $this->realized_at,
-            // 'canceled_at' => $this->canceled_at,
+            'canceled_at' => $this->canceled_at,
             'schedule_id' => $this->schedule_id,
         ];
     }
