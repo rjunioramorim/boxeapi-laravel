@@ -39,31 +39,5 @@ test('deve listar todos os checkins do dia e horário', function () {
             ]
         ]
     ]);
-    // dd($response->getContent());
-    // $response->assertJson([
-    //     'data' => [
-    //         [
-    //             'id' => $schedule->id,
-    //             'day' => '2023-09-11',
-    //             'hour' => '18:00',
-    //             'checkins' => 2,
-    //             'limit' => 12,
-    //             'clients' => [
-    //                 [
-    //                     'id' => $schedule->checkins[0]->client->id,
-    //                     'avatar_url' => url($schedule->checkins[0]->client->user->avatar_url),
-    //                     'name' => $schedule->checkins[0]->client->user->name,
-    //                     'checked' => true,
-    //                 ],
-    //                 [
-    //                     'id' => $schedule->checkins[1]->client->id,
-    //                     'avatar_url' => url($schedule->checkins[1]->client->user->avatar_url),
-    //                     'name' => $schedule->checkins[1]->client->user->name,
-    //                     'checked' => false,
-    //                 ],
-    //             ],
-    //         ],
-    //     ],
-    // ]);
     Carbon::setTestNow();
 });
