@@ -16,8 +16,6 @@ class CreateCheckinsController extends Controller
         $data = $request->all();
         $clientId = auth()->user()->client->id;
 
-        
-
         if (auth()->user()->active == false) {
             return response()->json(['message' => 'Não foi possível realizar o agendamento. Entre em contato com a administração.'], 422);
         }
@@ -28,9 +26,8 @@ class CreateCheckinsController extends Controller
 
         $request['hour'] = $day->addHour(1)->format('H:i');
         $open = ($day->isToday() && $schedule->hour > $request['hour']) || (!$day->isToday());
-
         
-        $checkinVerify = Checkin::where('client_id', $clientId)->where('checkin_date', $day->format('Y-m-d'))->where('hour', $schedule->hour)->where('canceled_at', null)->count();
+        $checkinVerify = Checkin::where('client_id', $clientId)->where('checkin_date', $day->format('Y-m-d'))->where('hour', $schedule->hour)->count();
         
         if ($checkinVerify >= 1 ) {
             return response()->json(['message' => 'Aula já agendada, tente outro horário'], 422);

@@ -30,11 +30,8 @@ class ListSchedulesController extends Controller
         $clientId = auth()->user()->client->id;
         $schedules->each(function ($schedule) use ($clientId) {
             $schedule->checked = $schedule->checkins->contains('client_id', $clientId);
-            $schedule->confirmed = $schedule->checkins->where('client_id', $clientId)->where('canceled', null)->pluck('confirmed_at')->last();
+            $schedule->confirmed = $schedule->checkins->where('client_id', $clientId)->where('canceled_at', null)->pluck('confirmed_at')->last();
         });
-
-
-
 
         $isEvent = $schedules->whereNotNull('event_date');
 
