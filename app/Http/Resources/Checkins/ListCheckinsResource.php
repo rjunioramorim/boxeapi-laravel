@@ -23,7 +23,6 @@ class ListCheckinsResource extends JsonResource
             'professor' => $this->schedule->professor,
             'confirmed_at' => $this->confirmed_at,
             // 'realized_at' => $this->realized_at,
-            'canceled_at' => $this->canceled_at,
             'schedule_id' => $this->schedule_id,
         ];
     }
