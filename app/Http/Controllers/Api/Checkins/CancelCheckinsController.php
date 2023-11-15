@@ -17,7 +17,7 @@ class CancelCheckinsController extends Controller
             if ($checkin->hour <= $hour) {
                 return response()->json(['message' => 'Não é possível cancelar esse agendamento, aula já iniciada.'], 422);
             }
-        } 
+        }
         if ($checkin->confirmed_at != null) {
             // dd($checkin->confirmed_at);
             return response()->json(['message' => 'Não é possível cancelar esse agendamento, aula já confirmada.'], 422);
@@ -27,5 +27,6 @@ class CancelCheckinsController extends Controller
         $checkin->delete();
 
         return response()->noContent();
+        // return response()->json([], 204);
     }
 }
