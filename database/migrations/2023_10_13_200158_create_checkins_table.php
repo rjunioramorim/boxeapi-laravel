@@ -20,6 +20,7 @@ return new class extends Migration
             $table->datetime('confirmed_at')->nullable();
             $table->datetime('realized_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

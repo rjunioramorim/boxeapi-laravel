@@ -22,6 +22,7 @@ class ListCheckinsController extends Controller
         $checkins = Checkin::with('schedule')
             ->where('client_id', $clientId)
             ->where('checkin_date', '>=', $day->format('Y-m-d'))
+            ->withTrashed()
             ->orderBy('checkin_date')
             ->orderBy('hour')
             ->get();
