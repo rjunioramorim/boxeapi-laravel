@@ -15,12 +15,13 @@ class DetailClientScheduleResource extends JsonResource
     public function toArray(Request $request): array
     {
         $userId = auth()->user()->id;
-
+        
         return [
             'id' => $this->id,
             'avatar_url' => url($this->client->user->avatar_url),
             'name' => $this->client->user->name,
             'checked' => $this->client->user_id == $userId,
+            'checkin_id' => $this->id,
         ];
     }
 }
