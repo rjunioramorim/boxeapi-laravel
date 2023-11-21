@@ -19,5 +19,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/schedules/{schedule}', DetailSchedulesController::class);
     Route::post('/checkins', CreateCheckinsController::class);
     Route::get('/checkins', ListCheckinsController::class);
-    Route::delete('/checkins/{checkin}', CancelCheckinsController::class);
+    Route::put('/checkins/{checkin}', CancelCheckinsController::class);
 });

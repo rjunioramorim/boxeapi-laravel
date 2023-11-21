@@ -19,12 +19,12 @@ class CancelCheckinsController extends Controller
             }
         }
         if ($checkin->status == ScheduleType::CONFIRMED->value) {
-            // dd($checkin->confirmed_at);
             return response()->json(['message' => 'Não é possível cancelar esse agendamento, aula já confirmada.'], 422);
         }
 
 
-        $checkin->delete();
+        $checkin->status = ScheduleType::CANCELED->value;
+        $checkin->save();
 
         return response()->noContent();
         // return response()->json([], 204);

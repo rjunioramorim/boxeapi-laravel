@@ -13,9 +13,9 @@ test('usuário logado pode cancelar agendamento antes do inicio da aula', functi
     $schedule = Schedule::factory()->has(Checkin::factory(['hour' => '17:00', 'client_id' => $user->client->id, 'checkin_date' => now()->format('Y-m-d')]))->create();
     $checkin = $schedule->checkins[0];
 
-    $response = $this->deleteJson('/api/checkins/'.$checkin->id);
+    $response = $this->putJson('/api/checkins/'.$checkin->id);
 
-    $this->assertDatabaseMissing('checkins', ['id' => $checkin->id]);
+    $this->assertDatabaseHas('checkins', ['id' => $checkin->id, 'status'=> ScheduleType::CANCELED->value]);
 
     Carbon::setTestNow();
     $response->assertStatus(204);
@@ -30,9 +30,9 @@ test('usuário logado pode cancelar agendamento antes do inicio da aula em outra
     $schedule = Schedule::factory()->has(Checkin::factory(['hour' => '05:30', 'client_id' => $user->client->id, 'checkin_date' => '2023-09-12']))->create();
     $checkin = $schedule->checkins[0];
 
-    $response = $this->deleteJson('/api/checkins/'.$checkin->id);
+    $response = $this->putJson('/api/checkins/'.$checkin->id);
     
-    $this->assertDatabaseMissing('checkins', ['id' => $checkin->id]);
+    $this->assertDatabaseHas('checkins', ['id' => $checkin->id, 'status'=> ScheduleType::CANCELED->value]);
 
     Carbon::setTestNow();
     $response->assertStatus(204);
@@ -48,7 +48,7 @@ test('usuário não pode cancelar agendamento se aula já tiver começado', func
     $checkin = $schedule->checkins[0];
 
     Carbon::setTestNow(Carbon::create(2023, 9, 11, 17, 15));
-    $response = $this->deleteJson('/api/checkins/'.$checkin->id);
+    $response = $this->putJson('/api/checkins/'.$checkin->id);
 
     Carbon::setTestNow();
 
@@ -66,7 +66,7 @@ test('usuário não pode cancelar agendamento se aula já tiver sido confirmado'
     $checkin = $schedule->checkins[0];
     
     Carbon::setTestNow(Carbon::create(2023, 9, 11, 16, 55));
-    $response = $this->deleteJson('/api/checkins/'.$checkin->id);
+    $response = $this->putJson('/api/checkins/'.$checkin->id);
 
     Carbon::setTestNow();
 
