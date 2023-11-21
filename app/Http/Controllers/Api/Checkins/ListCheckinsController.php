@@ -15,14 +15,13 @@ class ListCheckinsController extends Controller
     {
         $day = $request->day == null ? now() : Carbon::createFromFormat('Y-m-d', $request->day);
 
-        optional(Checkin::whereDate('checkin_date', $day->format('Y-m-d'))->where('hour', '<=', $day->format('H:i'))->update(['confirmed_at' => $day]));
+        optional(Checkin::whereDate('checkin_date', $day->format('Y-m-d'))->where('hour', '<=', $day->format('H:i'))->update(['status' => ScheduleType::CONFIRMED->value]));
 
         $clientId = auth()->user()->client->id;
 
         $checkins = Checkin::with('schedule')
             ->where('client_id', $clientId)
             ->where('checkin_date', '>=', $day->format('Y-m-d'))
-            ->withTrashed()
             ->orderBy('checkin_date')
             ->orderBy('hour')
             ->get();

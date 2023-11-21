@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Schedules;
 
+use App\Enums\ScheduleType;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Schedules\ListScheduleResource;
 use App\Models\Schedule;
@@ -23,16 +24,17 @@ class ListSchedulesController extends Controller
         if ($date->isPast()) {
             return response()->json(['data' => []]);
         }
+        
         $schedules = Schedule::with(['checkins'], function ($query) use ($date) {
-            return $query->where('checkins.canceled_at', null)->where('checkins.checkin_date', $date->format('Y-m-d'));
+            return $query->where('checkins.status', '!==', ScheduleType::CANCELED->value)->where('checkins.checkin_date', $date->format('Y-m-d'));
         })->where('day_of_week', $dayOfWeek)->get();
 
+        
         $clientId = auth()->user()->client->id;
         $schedules->each(function ($schedule) use ($clientId) {
-            $schedule->checked = $schedule->checkins->contains('client_id', $clientId);
-            $schedule->confirmed = $schedule->checkins->where('client_id', $clientId)->where('canceled_at', null)->pluck('confirmed_at')->last();
+           $schedule->status = $schedule->checkins->where('client_id', $clientId)->pluck('status')->last();
         });
-
+        
         $isEvent = $schedules->whereNotNull('event_date');
 
         if ($isEvent->count() > 0) {

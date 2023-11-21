@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\ScheduleType;
 use App\Models\Client;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,7 +23,7 @@ class CheckinFactory extends Factory
             'schedule_id' => '',
             'checkin_date' => now()->format('Y-m-d'),
             'hour' => '07:00',
-        
+            'status' => ScheduleType::SCHEDULED->value,
         ];
     }
 }

@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Checkin extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
-    protected $fillable = ['schedule_id', 'hour', 'checkin_date', 'client_id', 'canceled_at', 'confirmed_at', 'realized_at'];
+    protected $fillable = ['schedule_id', 'hour', 'checkin_date', 'client_id', 'status'];
 
     public function client()
     {

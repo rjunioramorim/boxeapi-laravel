@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Schedules;
 
+use App\Enums\ScheduleType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,11 +24,10 @@ class ListScheduleResource extends JsonResource
             'hour' => $this->hour,
             'professor' => $this->professor,
             'description' => $this->description,
-            'checkins' => $this->checkins->where('canceled_at', null)->count(),
+            'checkins' => $this->checkins->where('status', '!=', ScheduleType::CANCELED->value)->count(),
             'open' => $open,
             'limit' => $this->limit,
-            'checked' => $this->checked,
-            'confirmed' => $this->confirmed,
+            'status' => $this->status,
         ];
     }
 }

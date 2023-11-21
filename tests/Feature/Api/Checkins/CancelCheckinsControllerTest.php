@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ScheduleType;
 use App\Models\Checkin;
 use App\Models\Schedule;
 use Carbon\Carbon;
@@ -60,7 +61,7 @@ test('usuário não pode cancelar agendamento se aula já tiver sido confirmado'
     $user = login();
 
     Carbon::setTestNow(Carbon::create(2023, 9, 11, 9, 55));
-    $schedule = Schedule::factory()->has(Checkin::factory(['hour' => '17:00', 'client_id' => $user->client->id, 'checkin_date' => now()->format('Y-m-d'), 'confirmed_at' => now()]))->create();
+    $schedule = Schedule::factory()->has(Checkin::factory(['hour' => '17:00', 'client_id' => $user->client->id, 'checkin_date' => now()->format('Y-m-d'), 'status' => ScheduleType::CONFIRMED->value]))->create();
     
     $checkin = $schedule->checkins[0];
     

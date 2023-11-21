@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Schedules;
 
+use App\Enums\ScheduleType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +21,7 @@ class DetailScheduleResource extends JsonResource
             'id' => $this->id,
             'day' => $request->day,
             'hour' => $this->hour,
-            'checkins' => $this->checkins->where('canceled_at', null)->count(),
+            'checkins' => $this->checkins->where('status', '!=', ScheduleType::CANCELED->value)->count(),
             'limit' => $this->limit,
             'clients' => DetailClientScheduleResource::collection($this->checkins),
         ];

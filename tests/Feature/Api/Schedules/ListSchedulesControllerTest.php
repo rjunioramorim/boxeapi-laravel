@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ScheduleType;
 use App\Models\Checkin;
 use App\Models\Schedule;
 use Carbon\Carbon;
@@ -81,7 +82,7 @@ test('lista os horários de aula do dia com a confirmação do checkind do usuá
         ->create(['day_of_week' => 1, 'hour' => '17:00', 'description' => 'Aula de boxe']);
 
     Schedule::factory()
-        ->has(Checkin::factory(['hour' => '18:00', 'confirmed_at' => $today, 'client_id' => $user->client->id]))
+        ->has(Checkin::factory(['hour' => '18:00', 'status' => ScheduleType::CONFIRMED->value, 'client_id' => $user->client->id]))
         ->has(Checkin::factory(['hour' => '18:00']))
         ->create(['day_of_week' => 1, 'hour' => '18:00', 'description' => 'Aula de boxe']);
 
@@ -97,8 +98,7 @@ test('lista os horários de aula do dia com a confirmação do checkind do usuá
                 'professor' => 'Prof: India',
                 'checkins' => 1,
                 'open' => true,
-                'checked' => false,
-                'confirmed' => null
+                'status' => null,
             ],
             [
                 'id' => 2,
@@ -108,9 +108,7 @@ test('lista os horários de aula do dia com a confirmação do checkind do usuá
                 'professor' => 'Prof: India',
                 'checkins' => 2,
                 'open' => true,
-                'checked' => true,
-                'confirmed' => $today->format('Y-m-d H:i:s')
-
+                'status' => ScheduleType::CONFIRMED->value,
             ],
         ],
     ];
@@ -131,7 +129,7 @@ function factorySchedules()
         ->create(['day_of_week' => 1, 'hour' => '17:00', 'description' => 'Aula de boxe']);
 
     Schedule::factory()
-        ->has(Checkin::factory(['hour' => '18:00', 'confirmed_at' => now(), 'client_id' => $user->client->id]))
+        ->has(Checkin::factory(['hour' => '18:00', 'client_id' => $user->client->id]))
         ->has(Checkin::factory(['hour' => '18:00']))
         ->create(['day_of_week' => 1, 'hour' => '18:00', 'description' => 'Aula de boxe']);
 

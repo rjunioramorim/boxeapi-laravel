@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ScheduleType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,10 +18,9 @@ return new class extends Migration
             $table->foreignId('schedule_id')->references('id')->on('schedules');
             $table->date('checkin_date');
             $table->string('hour', 5);
-            $table->datetime('confirmed_at')->nullable();
-            $table->datetime('realized_at')->nullable();
+            $table->string('status')->default(ScheduleType::SCHEDULED->value);
             $table->timestamps();
-            $table->softDeletes();
+            
         });
     }
 

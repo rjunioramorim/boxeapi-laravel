@@ -26,7 +26,7 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'device_token' => null,
             'user_type' => UserType::CLIENT->value,
-            'avatar_url' => 'avatar.png',
+            'avatar_url' => 'images/avatar_default.jpg',
             'active' => true,
         ];
     }

@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum ScheduleType: string
 {
-    case REALIZED = 'realized';
+    case SCHEDULED = 'scheduled';
     case CONFIRMED = 'confirmed';
     case CANCELED = 'canceled';
 }
