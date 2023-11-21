@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Checkins;
 
+use App\Enums\ScheduleType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Checkins\CreateCheckinRequest;
 use App\Http\Resources\Checkins\CreateCheckinsResource;
@@ -27,7 +28,7 @@ class CreateCheckinsController extends Controller
         $request['hour'] = $day->addMinute(1)->format('H:i');
         $open = ($day->isToday() && $schedule->hour > $request['hour']) || (!$day->isToday());
         
-        $checkinVerify = Checkin::where('client_id', $clientId)->where('checkin_date', $day->format('Y-m-d'))->where('hour', $schedule->hour)->count();
+        $checkinVerify = Checkin::where('client_id', $clientId)->where('checkin_date', $day->format('Y-m-d'))->where('hour', $schedule->hour)->where('staatus', '!=', ScheduleType::CANCELED->value)->count();
         
         if ($checkinVerify >= 1 ) {
             return response()->json(['message' => 'Aula já agendada, tente outro horário'], 422);
