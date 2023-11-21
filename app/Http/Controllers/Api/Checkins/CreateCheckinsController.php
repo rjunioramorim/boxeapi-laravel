@@ -24,7 +24,7 @@ class CreateCheckinsController extends Controller
 
         $schedule = Schedule::with('checkins')->where('day_of_week', $day->dayOfWeek)->where('hour', $data['hour'])->first();
 
-        $request['hour'] = $day->addHour(1)->format('H:i');
+        $request['hour'] = $day->addMinute(1)->format('H:i');
         $open = ($day->isToday() && $schedule->hour > $request['hour']) || (!$day->isToday());
         
         $checkinVerify = Checkin::where('client_id', $clientId)->where('checkin_date', $day->format('Y-m-d'))->where('hour', $schedule->hour)->count();

@@ -26,7 +26,7 @@ class ListSchedulesController extends Controller
         }
         
         $schedules = Schedule::with(['checkins'], function ($query) use ($date) {
-            return $query->where('checkins.status', '!==', ScheduleType::CANCELED->value)->where('checkins.checkin_date', $date->format('Y-m-d'));
+            return $query->where('checkins.status', '!=', ScheduleType::CANCELED->value)->where('checkins.checkin_date', $date->format('Y-m-d'));
         })->where('day_of_week', $dayOfWeek)->get();
 
         
