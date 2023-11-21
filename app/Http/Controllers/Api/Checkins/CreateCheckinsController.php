@@ -28,7 +28,7 @@ class CreateCheckinsController extends Controller
         $request['hour'] = $day->addMinute(1)->format('H:i');
         $open = ($day->isToday() && $schedule->hour > $request['hour']) || (!$day->isToday());
         
-        $checkinVerify = Checkin::where('client_id', $clientId)->where('checkin_date', $day->format('Y-m-d'))->where('hour', $schedule->hour)->where('staatus', '!=', ScheduleType::CANCELED->value)->count();
+        $checkinVerify = Checkin::where('client_id', $clientId)->where('checkin_date', $day->format('Y-m-d'))->where('hour', $schedule->hour)->where('status', '!=', ScheduleType::CANCELED->value)->count();
         
         if ($checkinVerify >= 1 ) {
             return response()->json(['message' => 'Aula já agendada, tente outro horário'], 422);
