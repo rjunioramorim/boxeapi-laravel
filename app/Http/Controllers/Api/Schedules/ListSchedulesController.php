@@ -32,7 +32,9 @@ class ListSchedulesController extends Controller
         
         $clientId = auth()->user()->client->id;
         $schedules->each(function ($schedule) use ($clientId) {
+
            $schedule->status = $schedule->checkins->where('client_id', $clientId)->pluck('status')->last();
+        //    $schedule->status = $result != null ? ScheduleType::CONFIRMED->value : ScheduleType::SCHEDULED->value;
         });
         
         $isEvent = $schedules->whereNotNull('event_date');
