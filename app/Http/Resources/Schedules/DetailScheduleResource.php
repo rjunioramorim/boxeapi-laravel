@@ -21,7 +21,7 @@ class DetailScheduleResource extends JsonResource
             'id' => $this->id,
             'day' => $request->day,
             'hour' => $this->hour,
-            'checkins' => $this->checkins->where('status', '!=', ScheduleType::CANCELED->value)->count(),
+            'checkins' => $this->checkins->where('checkins.status', '!=', ScheduleType::CANCELED->value)->count(),
             'limit' => $this->limit,
             'clients' => DetailClientScheduleResource::collection($this->checkins),
         ];

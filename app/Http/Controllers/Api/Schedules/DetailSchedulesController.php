@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Schedules;
 
+use App\Enums\ScheduleType;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Schedules\DetailScheduleResource;
 use App\Models\Schedule;
@@ -13,7 +14,7 @@ class DetailSchedulesController extends Controller
     {
         $day = $request->day;
         $schedule = Schedule::with(['checkins.client.user'], function ($query) use ($day) {
-            return $query->where('checkins.checkin_date', $day)->where('checkins.canceled_at', null);
+            return $query->where('checkins.checkin_date', $day)->where('checkins.status', '!=', ScheduleType::CANCELED->value);
         })->where('id', $schedule->id)->first();
 
         return new DetailScheduleResource($schedule);
