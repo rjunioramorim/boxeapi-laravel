@@ -21,6 +21,10 @@ class ListSchedulesController extends Controller
 
     public function __invoke(Request $request)
     {
-        return response()->json(['data' => $this->service->listSchedules($request->day)]);
+        $request['day'] = $request->day != null ? Carbon::createFromFormat('Y-m-d', $request->day) : now();
+        
+        $schedules = $this->service->listSchedules($request['day']->format('Y-m-d'));
+
+        return ListScheduleResource::collection($schedules);
     }
 }

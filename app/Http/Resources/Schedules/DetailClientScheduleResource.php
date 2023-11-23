@@ -17,11 +17,10 @@ class DetailClientScheduleResource extends JsonResource
         $userId = auth()->user()->id;
         return [
             'id' => $this->id,
-            'avatar_url' => url($this->client->user->avatar_url),
-            'name' => $this->client->user->name,
-            'checked' => $this->client->user_id == $userId,
-            'checkin_id' => $this->id,
             'status'=> $this->status,
+            'isOwner' => $this->client->user_id == $userId,
+            'name' => $this->client->user->name,
+            'avatar_url' => url($this->client->user->avatar_url),
         ];
     }
 }

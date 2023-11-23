@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Schedules;
 
 use App\Enums\ScheduleType;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,19 +16,19 @@ class ListScheduleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-
-        $open = ($request->isToday && $this->hour > $request->hour) || (!$request->isToday);
+        $clientId = auth()->user()->client->id;
+        
 
         return [
             'id' => $this->id,
-            'day' => $request->day,
+            'day' => $request->day->format('Y-m-d'),
             'hour' => $this->hour,
             'professor' => $this->professor,
             'description' => $this->description,
-            'checkins' => $this->checkins->where('status', '!=', ScheduleType::CANCELED->value)->count(),
-            'open' => $open,
             'limit' => $this->limit,
-            'status' => $this->status,
+            'vacancies' => $this->limit - $this->checkins->count(),
+            'limit' => $this->limit,
+            'userScheduled' => $this->checkins->contains('client_id', $clientId),
         ];
     }
 }

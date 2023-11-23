@@ -21,9 +21,18 @@ class DetailScheduleResource extends JsonResource
             'id' => $this->id,
             'day' => $request->day,
             'hour' => $this->hour,
-            'checkins' => $this->checkins->where('checkins.status', '!=', ScheduleType::CANCELED->value)->count(),
+            'description'=> $this->description,
             'limit' => $this->limit,
+            'vacancies' => $this->limit - $this->checkins->count(),
             'clients' => DetailClientScheduleResource::collection($this->checkins),
+
+            // id' => $schedule->id,
+        //     'day' => $date,
+        //     'hour'=> $schedule->hour,
+        //     'professor'=> $schedule->professor,
+        //     'limit'=> $schedule->limit ,
+        //     'vacancies'=> $schedule->limit - $schedule->checkins->count(),
+        //     'clients' => $this->listCheckins($schedule->checkins, $clientId) ,
         ];
     }
 }

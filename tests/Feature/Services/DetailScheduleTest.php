@@ -30,11 +30,12 @@ test('Deve listar os dados do agendamento e os checkins relacionados a ele', fun
             "professor" => "Prof: India",
             "limit" => 12,
             "vacancies" => 10,
-            "checkins" => [
-                ["id" => 1, "hour" => "18:00", "checkin_date" => "2023-09-11", "status" => "scheduled", "isOwner" => true],
-                ["id" => 2, "hour" => "18:00", "checkin_date" => "2023-09-11", "status" => "scheduled", "isOwner" => false],
-            ]
-     ];
+            "clients" => [
+                ["id" => 1, "status" => "scheduled", "isOwner" => true, "name" => $schedule[0]->checkins[0]->client['name'], 'avatar_url' => url($schedule[0]->checkins[0]->client['avatar_url'])],
+                ["id" => 2, "status" => "scheduled", "isOwner" => false, "name" => $schedule[0]->checkins[1]->client['name'], 'avatar_url' => url($schedule[0]->checkins[1]->client['avatar_url'])],
+            ],
+
+    ];
 
  expect($schedule)->toBeArray()->toMatchArray($response);
 });
