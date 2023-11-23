@@ -13,7 +13,7 @@ test('deve listar todos os checkins do dia e horário', function () {
         ->has(Checkin::factory(['hour' => '18:00']))
         ->create(['day_of_week' => 1, 'hour' => '18:00', 'description' => 'Aula de boxe', 'limit' => 12]);
 
-    $response = $this->getJson("/api/schedules/{$schedule->id}?day=2023-09-11");
+    $response = $this->getJson("/api/schedules/{$schedule->id}/2023-09-11");
 
     $response->assertStatus(200);
     $response->assertJson([
@@ -21,20 +21,24 @@ test('deve listar todos os checkins do dia e horário', function () {
             'id' => $schedule->id,
             'day' => "2023-09-11",
             'hour' => $schedule->hour,
-            'checkins' => 2,
+            'description' => $schedule->description,
             'limit' => $schedule->limit,
+            'vacancies' => 10,
             'clients' => [
                 [
                     'id' => 1,
-                    'avatar_url' => url($schedule->checkins[0]->client->user->avatar_url),
+                    'status' => $schedule->checkins[0]->status,
+                    'isOwner' => true,
                     'name' => $schedule->checkins[0]->client->user->name,
-                    'checked' => true,
+                    'avatar_url' => url($schedule->checkins[0]->client->user->avatar_url),
                 ],
                 [
                     'id' => $schedule->checkins[1]->client->id,
-                    'avatar_url' => url($schedule->checkins[1]->client->user->avatar_url),
+                    'status' => $schedule->checkins[1]->status,
+                    'isOwner' => false,
                     'name' => $schedule->checkins[1]->client->user->name,
-                    'checked' => false,
+                    'avatar_url' => url($schedule->checkins[1]->client->user->avatar_url),
+
                 ],
             ]
         ]
