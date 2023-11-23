@@ -15,7 +15,6 @@ class DetailScheduleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $open = ($request->isToday && $this->hour > $request->hour) || (!$request->isToday);
 
         return [
             'id' => $this->id,
@@ -25,14 +24,6 @@ class DetailScheduleResource extends JsonResource
             'limit' => $this->limit,
             'vacancies' => $this->limit - $this->checkins->count(),
             'clients' => DetailClientScheduleResource::collection($this->checkins),
-
-            // id' => $schedule->id,
-        //     'day' => $date,
-        //     'hour'=> $schedule->hour,
-        //     'professor'=> $schedule->professor,
-        //     'limit'=> $schedule->limit ,
-        //     'vacancies'=> $schedule->limit - $schedule->checkins->count(),
-        //     'clients' => $this->listCheckins($schedule->checkins, $clientId) ,
         ];
     }
 }
