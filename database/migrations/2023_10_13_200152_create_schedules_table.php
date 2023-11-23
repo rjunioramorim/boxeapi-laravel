@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('professor');
             $table->boolean('active')->default(true);
-            $table->date('event_date')->nullable();
+            // $table->date('event_date')->nullable();
             $table->unsignedSmallInteger('limit')->default(12);
             $table->timestamps();
         });
