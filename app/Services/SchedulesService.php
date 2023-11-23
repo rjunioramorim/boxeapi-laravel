@@ -30,26 +30,7 @@ class SchedulesService
             ->get();
     
         return $schedules;    
-        // $data = collect([]);
-        // $clientId = auth()->user()->client->id;
-        // $schedules->each(function ($schedule) use ($clientId, $date, $data) {
-        //     $data->push(
-        //         [
-        //             'id' => $schedule->id,
-        //             'day' => $date->format('Y-m-d'),
-        //             'hour'=> $schedule->hour,
-        //             'description'=> $schedule->description,
-        //             'professor'=> $schedule->professor,
-        //             'limit'=> $schedule->limit ,
-        //             'vacancies'=> $schedule->limit - $schedule->checkins->count(),
-        //             'userScheduled'=> $schedule->checkins->contains('client_id', $clientId),
-        //         ]
-        //     );
-        // });
-        
-        // return $data->toArray();
     }
-
 
     public function getSchedule(Schedule $schedule, string $date)
     {
@@ -59,40 +40,6 @@ class SchedulesService
           ->where('schedules.id', $schedule->id)
           ->first();
 
-        // $schedule = Schedule::with(['checkins.client.user'], function ($query) use ($day) {
-            //     return $query->where('checkins.checkin_date', $day)->where('checkins.status', '!=', ScheduleType::CANCELED->value);
-            // })->where('id', $schedule->id)->first();
-
         return $schedule;
-        
-        // $clientId = auth()->user()->client->id;
-        
-        // $data = [
-        //     'id' => $schedule->id,
-        //     'day' => $date,
-        //     'hour'=> $schedule->hour,
-        //     'description'=> $schedule->description,
-        //     'professor'=> $schedule->professor,
-        //     'limit'=> $schedule->limit ,
-        //     'vacancies'=> $schedule->limit - $schedule->checkins->count(),
-        //     'clients' => $this->listCheckins($schedule->checkins, $clientId) ,
-        // ];
-
-        // dd($data);
-        // return $data;
     }
-
-    // private function listCheckins($checkins, $clientId){
-    //     $data = collect();
-    //     $checkins->each(function($checkin) use($data, $clientId){
-    //         $data->push([
-    //             'id' => $checkin->id,
-    //             'status' => $checkin->status,
-    //             'isOwner' => $checkin->client_id == $clientId,
-    //             'name' => $checkin->client->user->name,
-    //             'avatar_url' => url($checkin->client->user->avatar_url)
-    //         ])->toArray();
-    //     });
-    //    return $data->toArray();
-    // }
 }
