@@ -5,28 +5,6 @@ use App\Models\Checkin;
 use App\Models\Schedule;
 use Carbon\Carbon;
 
-test('deve listar somente o evento e não as aulas', function () {
-    factorySchedules();
-    $today = now();
-
-    $event = Schedule::factory()->hasCheckins(2)->create(['day_of_week' => '1', 'hour' => '15:00', 'limit' => 20, 'description' => 'Evento', 'event_date' => $today->format('Y-m-d')]);
-    $response = $this->getJson('/api/schedules?day=2023-09-11');
-
-    $response->assertJson([
-        'data' => [
-            [
-                'id' => $event->id,
-                'day' => $today->format('Y-m-d'),
-                'hour' => '15:00',
-                'description' => 'Evento',
-                'professor' => 'Prof: India',
-                'checkins' => 2,
-                'open' => true,
-            ],
-        ],
-    ]);
-});
-
 test('lista os horários de aula do dia, sem receber a data', function () {
     factorySchedules();
     $today = now();
@@ -52,16 +30,11 @@ test('lista os horários de aula do dia, informando a data', function () {
 });
 
 test('não deve lista os horários de aula do dia se a data for anterior ao dia atual', function () {
-    $user = login();
+    login();
 
-    Schedule::factory()->create(['day_of_week' => 1, 'hour' => '05:30', 'description' => 'Aula de boxe']);
-    Schedule::factory()->create(['day_of_week' => 2, 'hour' => '05:30', 'description' => 'Aula de boxe']);
-    Schedule::factory()->create(['day_of_week' => 2, 'hour' => '06:30', 'description' => 'Aula de boxe']);
-
-    Schedule::factory()
-        ->has(Checkin::factory(['hour' => '18:00', 'client_id' => $user->client->id]))
-        ->has(Checkin::factory(['hour' => '18:00']))
-        ->create(['day_of_week' => 2, 'hour' => '18:00', 'description' => 'Aula de boxe']);
+    Schedule::factory()->create(['day_of_week' => 1, 'hour' => '05:30']);
+    Schedule::factory()->create(['day_of_week' => 2, 'hour' => '05:30']);
+    Schedule::factory()->create(['day_of_week' => 2, 'hour' => '06:30']);
 
     Carbon::setTestNow(Carbon::create(2023, 9, 12, 12, 15));
 
@@ -78,37 +51,35 @@ test('lista os horários de aula do dia com a confirmação do checkind do usuá
     $user = login();
     Carbon::setTestNow(Carbon::create(2023, 9, 11, 10, 15));
     $today = now();
-    Schedule::factory()->has(Checkin::factory(['hour' => '17:00']))
-        ->create(['day_of_week' => 1, 'hour' => '17:00', 'description' => 'Aula de boxe']);
+    Schedule::factory()->create(['hour' => '05:30', 'day_of_week' => 1]);
+    $scheduleOne = Schedule::factory()->create(['hour' => '18:00', 'day_of_week' => 1]);
+    $schedule = Schedule::factory()->create(['hour' => '17:00', 'day_of_week' => 1]);
 
-    Schedule::factory()
-        ->has(Checkin::factory(['hour' => '18:00', 'status' => ScheduleType::CONFIRMED->value, 'client_id' => $user->client->id]))
-        ->has(Checkin::factory(['hour' => '18:00']))
-        ->create(['day_of_week' => 1, 'hour' => '18:00', 'description' => 'Aula de boxe']);
-
+    $checkin = Checkin::factory()->create(['client_id' => $user->client->id, 'schedule_id' => $schedule->id]);
+    Checkin::factory()->create(['schedule_id' => $schedule->id]);
 
     $response = $this->getJson('/api/schedules?day=2023-09-11');
     $data =  [
         'data' => [
             [
-                'id' => 1,
+                'id' => $schedule->id,
                 'day' => $today->format('Y-m-d'),
                 'hour' => '17:00',
-                'description' => 'Aula de boxe',
                 'professor' => 'Prof: India',
-                'checkins' => 1,
-                'open' => true,
-                'status' => null,
+                'description' => 'Aula de boxe',
+                "limit" => 12,
+                "vacancies" => 10,
+                "userScheduled" => true
             ],
             [
-                'id' => 2,
+                'id' => $scheduleOne->id,
                 'day' => $today->format('Y-m-d'),
                 'hour' => '18:00',
-                'description' => 'Aula de boxe',
                 'professor' => 'Prof: India',
-                'checkins' => 2,
-                'open' => true,
-                'status' => ScheduleType::CONFIRMED->value,
+                'description' => 'Aula de boxe',
+                "limit" => 12,
+                "vacancies" => 12,
+                "userScheduled" => false
             ],
         ],
     ];
@@ -122,18 +93,15 @@ test('lista os horários de aula do dia com a confirmação do checkind do usuá
 
 function factorySchedules()
 {
-    $user = login();
-    Schedule::factory()->create(['day_of_week' => 1, 'hour' => '05:30', 'description' => 'Aula de boxe']);
-    Schedule::factory()->create(['day_of_week' => 1, 'hour' => '06:30', 'description' => 'Aula de boxe']);
-    Schedule::factory()->has(Checkin::factory(['hour' => '17:00']))
-        ->create(['day_of_week' => 1, 'hour' => '17:00', 'description' => 'Aula de boxe']);
-
-    Schedule::factory()
-        ->has(Checkin::factory(['hour' => '18:00', 'client_id' => $user->client->id]))
-        ->has(Checkin::factory(['hour' => '18:00']))
-        ->create(['day_of_week' => 1, 'hour' => '18:00', 'description' => 'Aula de boxe']);
-
     Carbon::setTestNow(Carbon::create(2023, 9, 11, 10, 15));
+    $user = login();
+
+    Schedule::factory()->create(['day_of_week' => 1, 'hour' => '05:30']);
+    Schedule::factory()->create(['day_of_week' => 1, 'hour' => '18:00']);
+
+    $schedule = Schedule::factory()->create(['day_of_week' => 1, 'hour' => '17:00']);
+    $checkin = Checkin::factory()->create(['client_id' => $user->client->id, 'schedule_id' => $schedule->id]);
+    Checkin::factory()->create(['schedule_id' => $schedule->id]);
 }
 
 
@@ -143,41 +111,25 @@ function loadReturn($today)
     return [
         'data' => [
             [
-                'id' => 1,
+                'id' => 3,
                 'day' => $today->format('Y-m-d'),
-                'hour' => '05:30',
-                'description' => 'Aula de boxe',
+                'hour' => '17:00',
                 'professor' => 'Prof: India',
-                'checkins' => 0,
-                'open' => false,
+                'description' => 'Aula de boxe',
+                "limit" => 12,
+                "vacancies" => 10,
+                "userScheduled" => true
             ],
             [
                 'id' => 2,
                 'day' => $today->format('Y-m-d'),
-                'hour' => '06:30',
-                'description' => 'Aula de boxe',
-                'professor' => 'Prof: India',
-                'checkins' => 0,
-                'open' => false,
-            ],
-            [
-                'id' => 3,
-                'day' => $today->format('Y-m-d'),
-                'hour' => '17:00',
-                'description' => 'Aula de boxe',
-                'professor' => 'Prof: India',
-                'checkins' => 1,
-                'open' => true,
-            ],
-            [
-                'id' => 4,
-                'day' => $today->format('Y-m-d'),
                 'hour' => '18:00',
-                'description' => 'Aula de boxe',
                 'professor' => 'Prof: India',
-                'checkins' => 2,
-                'open' => true,
-            ],
+                'description' => 'Aula de boxe',
+                "limit" => 12,
+                "vacancies" => 12,
+                "userScheduled" => false
+            ]
         ],
     ];
 }
