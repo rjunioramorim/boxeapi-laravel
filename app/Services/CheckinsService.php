@@ -27,6 +27,7 @@ class CheckinsService
 
     public function createCheckin($data)
     {
+        $this->verifyUserActive();
         $this->vefiryHourCheckin($data);
         $this->vefiryCheckinLimit($data);
         $this->vefiryCheckinCreated($data);
@@ -83,7 +84,15 @@ class CheckinsService
             ->where('status', '<>', ScheduleType::CANCELED->value)->count();
 
         if ($checkin >= $schedule->limit) {
-            throw new Exception('Essa aula já está cheia, escolha outro horário');
+            throw new Exception('Ops... Essa aula não tem mais vagas, tente outro horário');
         }
     }
+
+    private function verifyUserActive() {
+        if (auth()->user()->active ==false) {
+            throw new Exception('Não foi possível realizar o agendamento. Entre em contato com a administração.');
+        }
+    }
+
+    
 }
