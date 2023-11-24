@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreignId('plan_id')->references('id')->on('plans');
+            $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->string('phone', 20);
             $table->unsignedSmallInteger('due_date')->default(1);
             $table->dateTime('verified_at')->nullable();

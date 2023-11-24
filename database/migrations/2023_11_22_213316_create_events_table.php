@@ -13,12 +13,8 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('description');
-            $table->date('event_date');
-            $table->time('hour');
+            $table->foreignId('schedule_id')->references('id')->on('schedules');
             $table->string('image_url');
-            $table->smallInteger('limit')->default(1);
             $table->decimal('price', 10, 2)->default(0);
             $table->timestamps();
         });

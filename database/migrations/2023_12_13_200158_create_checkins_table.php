@@ -14,9 +14,8 @@ return new class extends Migration
     {
         Schema::create('checkins', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->references('id')->on('clients');
+            $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('schedule_id')->references('id')->on('schedules');
-            $table->int('event_id')->nullable();
             $table->date('checkin_date');
             $table->string('hour', 5);
             $table->string('status')->default(ScheduleType::SCHEDULED->value);

@@ -14,13 +14,12 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->unsignedSmallInteger('day_of_week');
-            $table->string('hour', 5);
             $table->string('description')->nullable();
             $table->string('professor');
-            $table->boolean('active')->default(true);
-            // $table->date('event_date')->nullable();
+            $table->unsignedSmallInteger('weekday');
+            $table->json('hour', 5);
             $table->unsignedSmallInteger('limit')->default(12);
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }
