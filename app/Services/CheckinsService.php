@@ -35,6 +35,24 @@ class CheckinsService
         return $this->saveCheckin($data);
     }
 
+    public function cancelCheckin(Checkin $checkin)
+    {
+        $day = now();
+        $hour = $day->format('H:m');
+
+        if ($checkin->checkin_date <= $day->format('Y-m-d')) {
+            if ($checkin->hour <= $hour) {
+                throw new Exception('Não é possível cancelar esse agendamento, aula já iniciada.');
+            }
+        }
+        if ($checkin->status == ScheduleType::CONFIRMED->value) {
+            throw new Exception('Não é possível cancelar esse agendamento, aula já confirmada.');
+        }
+
+        $checkin->status = ScheduleType::CANCELED->value;
+        $checkin->save();
+    }
+
     private function saveCheckin($data)
     {
         $clientId = auth()->user()->client->id;

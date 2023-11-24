@@ -5,28 +5,23 @@ namespace App\Http\Controllers\Api\Checkins;
 use App\Enums\ScheduleType;
 use App\Http\Controllers\Controller;
 use App\Models\Checkin;
+use App\Services\CheckinsService;
 
 class CancelCheckinsController extends Controller
 {
+    private $service;
+
+    public function __construct(CheckinsService $service)
+    {
+        $this->service = $service;    
+    }
     public function __invoke(Checkin $checkin)
     {
-        $day = now();
-        $hour = $day->format('H:m');
-
-        if ($checkin->checkin_date <= $day->format('Y-m-d')) {
-            if ($checkin->hour <= $hour) {
-                return response()->json(['message' => 'Não é possível cancelar esse agendamento, aula já iniciada.'], 422);
-            }
+        try {
+            $this->service->cancelCheckin($checkin);
+            return response()->json([], 204);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 422);
         }
-        if ($checkin->status == ScheduleType::CONFIRMED->value) {
-            return response()->json(['message' => 'Não é possível cancelar esse agendamento, aula já confirmada.'], 422);
-        }
-
-
-        $checkin->status = ScheduleType::CANCELED->value;
-        $checkin->save();
-
-        return response()->noContent();
-        // return response()->json([], 204);
     }
 }
