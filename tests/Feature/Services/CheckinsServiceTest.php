@@ -76,4 +76,4 @@ test('Não pode fazer o checkin em uma aula com o limite cheio', function () {
     ]);
 
     $service->createCheckin($data);
-})->throws('Essa aula já está cheia, escolha outro horário');
+})->throws('Ops... Essa aula não tem mais vagas, tente outro horário');
