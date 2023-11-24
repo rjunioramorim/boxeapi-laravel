@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('client_id')->references('id')->on('clients');
             $table->foreignId('schedule_id')->references('id')->on('schedules');
+            $table->int('event_id')->nullable();
             $table->date('checkin_date');
             $table->string('hour', 5);
             $table->string('status')->default(ScheduleType::SCHEDULED->value);
