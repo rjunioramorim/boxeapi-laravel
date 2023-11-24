@@ -22,9 +22,7 @@ class ListCheckinsResource extends JsonResource
             'description' => $this->schedule->description,
             'professor' => $this->schedule->professor,
             'status' => $this->status,
-            // 'realized_at' => $this->realized_at,
             'schedule_id' => $this->schedule_id,
-            // 'deleted_at' => $this->deleted_at,
         ];
     }
 }
