@@ -19,8 +19,8 @@ class ClientFactory extends Factory
     public function definition(): array
     {
         return [
+            'plan_id' => rand(1, 2),
             'user_id' => User::factory(),
-            'plan_id' => Plan::factory(),
             'phone' => fake()->phoneNumber(),
             'due_date' => random_int(1, 30),
             'verified_at' => null,

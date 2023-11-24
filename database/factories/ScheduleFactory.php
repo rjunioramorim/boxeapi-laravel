@@ -17,11 +17,12 @@ class ScheduleFactory extends Factory
     public function definition(): array
     {
         return [
-            'day_of_week' => random_int(0, 6),
-            'hour' => '17:00',
-            'active' => true,
-            'professor' => 'Prof: India',
             'description' => 'Aula de boxe',
+            'professor' => 'Prof: India',
+            'weekday' => random_int(0, 6),
+            'hour' => json_encode(['17:00']),
+            'limit' => 12,
+            'active' => true,
             // 'event_date' => null,
         ];
     }

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\ScheduleType;
 use App\Models\Client;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,8 +20,9 @@ class CheckinFactory extends Factory
     public function definition(): array
     {
         return [
-            'client_id' => Client::factory(),
+            'user_id' => User::factory(),
             'schedule_id' => '',
+            'type' => 'schedule',
             'checkin_date' => now()->format('Y-m-d'),
             'hour' => '07:00',
             'status' => ScheduleType::SCHEDULED->value,

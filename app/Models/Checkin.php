@@ -10,11 +10,11 @@ class Checkin extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['schedule_id', 'hour', 'checkin_date', 'client_id', 'status'];
+    protected $fillable = ['schedule_id', 'hour', 'checkin_date', 'user_id', 'status'];
 
-    public function client()
+    public function user()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(User::class);
     }
 
     public function schedule()

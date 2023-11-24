@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Schedule;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,12 +18,8 @@ class EventFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->words(2, true),
-            'description' => fake()->sentence,
-            'event_date' => fake()->date(),
-            'hour' => fake()->time('H:i'),
+            'schedule_id' => '',
             'image_url' => fake()->imageUrl(),
-            'limit' => random_int(1, 20),
             'price' => fake()->randomFloat(2, 10, 100),
         ];
     }

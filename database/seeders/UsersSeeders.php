@@ -13,12 +13,9 @@ class UsersSeeders extends Seeder
      */
     public function run(): void
     {
-        User::factory()
-            ->hasClient()
-            ->create(['email' => 'user@user.com', 'user_type' => UserType::CLIENT->value, 'avatar_url' => 'images/avatar_default.jpg']);
+        User::factory()->hasClient()->create(['email' => 'user@user.com', 'user_type' => UserType::CLIENT->value]);
+        User::factory()->hasClient()->create(['email' => 'user1@user.com', 'user_type' => UserType::CLIENT->value]);
 
-        User::factory()->hasClient()->create(['email' => 'user1@user.com', 'user_type' => UserType::CLIENT->value, 'avatar_url' => 'images/avatar_default.jpg']);
-
-        User::factory()->create(['email' => 'admin@admin.com', 'user_type' => UserType::MANAGER->value, 'avatar_url' => 'images/avatar_default.jpg']);
+        User::factory()->create(['email' => 'admin@admin.com', 'user_type' => UserType::MANAGER->value]);
     }
 }
