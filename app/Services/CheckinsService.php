@@ -25,6 +25,22 @@ class CheckinsService
         return $checkins;
     }
 
+    public function listCheckinOnlyDay()
+    {
+        $user = auth()->user();
+        $today = now()->format('Y-m-d');
+
+        $checkins = Checkin::with('schedule')
+            ->where('user_id', $user->id)
+            ->where('checkin_date', '=', $today)
+            ->where('status', '<>', ScheduleType::CANCELED->value)
+            ->orderBy('checkin_date')
+            ->orderBy('status')
+            ->get();
+
+        return $checkins;
+    }
+
     public function createCheckin($data)
     {
         $this->verifyUserActive();

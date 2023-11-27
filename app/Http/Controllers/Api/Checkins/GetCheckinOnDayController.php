@@ -7,7 +7,7 @@ use App\Http\Resources\Checkins\ListCheckinsResource;
 use App\Services\CheckinsService;
 use Illuminate\Http\Request;
 
-class ListCheckinsController extends Controller
+class GetCheckinOnDayController extends Controller
 {
     private $service;
 
@@ -17,7 +17,7 @@ class ListCheckinsController extends Controller
     }
     public function __invoke(Request $request)
     {
-        $checkins = $this->service->listCheckins();
+        $checkins = $this->service->listCheckinOnlyDay();
 
         return ListCheckinsResource::collection($checkins);
     }

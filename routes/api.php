@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\LogoutController;
 use App\Http\Controllers\Api\Checkins\CancelCheckinsController;
 use App\Http\Controllers\Api\Checkins\CreateCheckinsController;
+use App\Http\Controllers\Api\Checkins\GetCheckinOnDayController;
 use App\Http\Controllers\Api\Checkins\ListCheckinsController;
 use App\Http\Controllers\Api\Schedules\DetailSchedulesController;
 use App\Http\Controllers\Api\Schedules\ListSchedulesController;
@@ -21,5 +22,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/schedules/{schedule}/{day}', DetailSchedulesController::class);
     Route::post('/checkins', CreateCheckinsController::class);
     Route::get('/checkins', ListCheckinsController::class);
+    Route::get('/checkins-day', GetCheckinOnDayController::class);
     Route::put('/checkins/{checkin}', CancelCheckinsController::class);
 });
