@@ -16,7 +16,7 @@ class CheckinsService
         $today = now()->format('Y-m-d');
 
         $checkins = Checkin::with('schedule')
-            ->where('client_id', $user->client->id)
+            ->where('user_id', $user->id)
             ->where('checkin_date', '>=', $today)
             ->orderBy('checkin_date')
             ->orderBy('hour')
@@ -55,12 +55,12 @@ class CheckinsService
 
     private function saveCheckin($data)
     {
-        $clientId = auth()->user()->client->id;
+        $userId = auth()->user()->id;
         $checkin = Checkin::create([
             'schedule_id' => $data['schedule_id'],
             'hour' => $data['hour'],
             'checkin_date' => $data['checkin_date'],
-            'client_id' => $clientId,
+            'user_id' => $userId,
         ]);
         return $checkin;
     }
@@ -71,9 +71,9 @@ class CheckinsService
         $dateTime = Carbon::createFromFormat('Y-m-d', $data['checkin_date']);
         $today = $dateTime->isSameDay(now());
         $isFuture = $dateTime->isAfter(now());
-
-        $schedule = Schedule::find($data['schedule_id'])->first();
-
+        
+        $schedule = Schedule::where('id', $data['schedule_id'])->first();
+        
         if (($today && $dateTime->format('H:i') < $schedule->hour) || $isFuture) {
             return;
         }
@@ -85,7 +85,7 @@ class CheckinsService
         $checkin = Checkin::where('schedule_id', $data['schedule_id'])
             ->whereDate('checkin_date', $data['checkin_date'])
             ->where('hour', $data['hour'])
-            ->where('client_id', auth()->user()->client->id)
+            ->where('user_id', auth()->user()->id)
             ->where('status', '<>', ScheduleType::CANCELED->value)->count();
         if ($checkin > 0) {
             throw new Exception('Você já tem uma aula agendada para esse horário');

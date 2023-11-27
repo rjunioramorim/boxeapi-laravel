@@ -9,6 +9,8 @@ class Schedule extends Model
 {
     use HasFactory;
 
+    // protected $casts = ['hour' => 'array'];
+
     public function checkins()
     {
         return $this->hasMany(Checkin::class);

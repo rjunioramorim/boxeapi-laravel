@@ -13,12 +13,13 @@ class SchedulesSeeder extends Seeder
      */
     public function run(): void
     {
-        $hours = json_encode(['05:30', '06:30', '10:00', '17:00', '18:00', '19:00', '20:00']);
-        Schedule::factory()->create(['weekday' => 1, 'hour' => $hours]);
-        Schedule::factory()->create(['weekday' => 2, 'hour' => $hours]);
-        Schedule::factory()->create(['weekday' => 3, 'hour' => $hours]);
-        Schedule::factory()->create(['weekday' => 4, 'hour' => $hours]);
-        Schedule::factory()->create(['weekday' => 5, 'hour' => $hours]);
+        $hours = ['05:30', '06:30', '10:00', '17:00', '18:00', '19:00', '20:00'];
+
+        for($i = 0; $i < 5; $i++) {
+            foreach($hours as $hour) {
+                Schedule::factory()->create(['day_of_week' => $i +1, 'hour' => $hour]);
+            }
+        }
         
         // Schedule::factory()->create(['weekday' => 1, 'hour' => '06:30', 'description' => 'Aula de Boxe']);
         // Schedule::factory()->create(['weekday' => 1, 'hour' => '17:00', 'description' => 'Aula de Boxe Kids']);

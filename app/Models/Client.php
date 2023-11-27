@@ -9,10 +9,6 @@ class Client extends Model
 {
     use HasFactory;
 
-    public function checkins()
-    {
-        return $this->hasMany(Checkin::class);
-    }
 
     public function plan()
     {

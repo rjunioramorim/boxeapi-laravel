@@ -16,7 +16,7 @@ class ListCheckinsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'client_id' => $this->client_id,
+            'user_id' => $this->user_id,
             'hour' => $this->hour,
             'day' => $this->checkin_date,
             'description' => $this->schedule->description,

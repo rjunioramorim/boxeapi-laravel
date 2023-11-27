@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Client::class);
     }
+
+    public function checkins()
+    {
+        return $this->hasMany(Checkin::class);
+    }
 }

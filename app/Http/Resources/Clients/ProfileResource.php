@@ -21,7 +21,7 @@ class ProfileResource extends JsonResource
             'phone' => $this->client->phone,
             'plan_name' => $this->client->plan->name,
             'plan_qtd_days' => $this->client->plan->qtd_days,
-            'total_checkins' => $this->client->checkins->count(),
+            'total_checkins' => $this->client->user->checkins->count(),
             'active' => $this->client->verified_at,
             'avatar_url' => url($this->avatar_url) ?? url('avatar_default.jpg'),
             'due_date' => $this->client->due_date,

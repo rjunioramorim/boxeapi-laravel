@@ -16,8 +16,8 @@ return new class extends Migration
             $table->id();
             $table->string('description')->nullable();
             $table->string('professor');
-            $table->unsignedSmallInteger('weekday');
-            $table->json('hour')->nullable();
+            $table->unsignedSmallInteger('day_of_week');
+            $table->string('hour');
             $table->unsignedSmallInteger('limit')->default(12);
             $table->boolean('active')->default(true);
             $table->timestamps();
