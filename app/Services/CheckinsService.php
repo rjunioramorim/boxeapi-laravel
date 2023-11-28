@@ -35,7 +35,7 @@ class CheckinsService
             ->where('checkin_date', '=', $today)
             ->orderBy('checkin_date')
             ->orderBy('id', 'desc')
-            ->first();
+            ->get();
 
         return $checkins;
     }

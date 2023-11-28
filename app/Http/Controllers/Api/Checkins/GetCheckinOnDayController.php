@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Checkins;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Checkins\ListCheckinsResource;
+use App\Models\Checkin;
 use App\Services\CheckinsService;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class GetCheckinOnDayController extends Controller
     public function __invoke(Request $request)
     {
         $checkins = $this->service->listCheckinOnlyDay();
-
-        return new ListCheckinsResource($checkins);
+      
+        return ListCheckinsResource::collection($checkins);
     }
 }
