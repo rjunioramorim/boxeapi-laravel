@@ -16,7 +16,7 @@ class ListScheduleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $clientId = auth()->user()->client->id;
+        $userId = auth()->user()->id;
         
 
         return [
@@ -28,7 +28,7 @@ class ListScheduleResource extends JsonResource
             'limit' => $this->limit,
             'vacancies' => $this->limit - $this->checkins->count(),
             'limit' => $this->limit,
-            'userScheduled' => $this->checkins->contains('client_id', $clientId),
+            'userScheduled' => $this->checkins->contains('user_id', $userId),
         ];
     }
 }
