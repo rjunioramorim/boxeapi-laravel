@@ -34,8 +34,7 @@ class CheckinsService
             ->where('user_id', $user->id)
             ->where('checkin_date', '=', $today)
             ->orderBy('checkin_date')
-            ->orderBy('status')
-            ->latest()
+            ->orderBy('id', 'desc')
             ->first();
 
         return $checkins;
