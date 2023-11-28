@@ -8,6 +8,8 @@ use App\Models\Schedule;
 use Carbon\Carbon;
 use Exception;
 
+use function PHPUnit\Framework\returnSelf;
+
 class CheckinsService
 {
     public function listCheckins()
@@ -33,10 +35,29 @@ class CheckinsService
         $checkins = Checkin::with('schedule')
             ->where('user_id', $user->id)
             ->where('checkin_date', '=', $today)
-            ->orderBy('checkin_date')
-            ->orderBy('id', 'desc')
+            ->orderBy('hour')
             ->get();
 
+        $scheduled = $checkins->filter(function($checkin) {
+            return $checkin->status == 'scheduled';
+        });
+        $checkins = $scheduled->count() > 0 ? $scheduled : $checkins; 
+
+        $confirmed = $checkins->filter(function($checkin) {
+            return $checkin->status == 'confirmed';
+        });
+        $checkins = $confirmed->count() > 0 ? $confirmed : $checkins;     
+        
+        $off = $checkins->filter(function($checkin) {
+            return $checkin->status == 'off';
+        });
+        $checkins = $off->count() > 0 ? $off : $checkins;         
+        
+        $canceled = $checkins->filter(function($checkin) {
+            return $checkin->status == 'canceled';
+        });
+        $checkins = $canceled->count() > 0 ? $canceled : $checkins;         
+        
         return $checkins;
     }
 

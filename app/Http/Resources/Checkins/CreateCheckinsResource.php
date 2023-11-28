@@ -17,7 +17,7 @@ class CreateCheckinsResource extends JsonResource
         return [
             'id' => $this->id,
             'schedule_id' => $this->schedule_id,
-            'client_id' => $this->client_id,
+            'user_id' => $this->user_id,
             'checkin_date' => $this->checkin_date,
             'hour' => $this->hour,
         ];
