@@ -19,6 +19,6 @@ class GetCheckinOnDayController extends Controller
     {
         $checkins = $this->service->listCheckinOnlyDay();
 
-        return ListCheckinsResource::collection($checkins);
+        return new ListCheckinsResource($checkins);
     }
 }
