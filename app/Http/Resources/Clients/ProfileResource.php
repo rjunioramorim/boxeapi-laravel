@@ -23,7 +23,7 @@ class ProfileResource extends JsonResource
             'plan_qtd_days' => $this->client->plan->qtd_days,
             'total_checkins' => $this->client->user->checkins->count(),
             'active' => $this->client->verified_at,
-            'avatar_url' => url($this->avatar_url) ?? url('avatar_default.jpg'),
+            'avatar_url' => asset('storage/avatars/'.$this->avatar_url) ?? url('avatar_default.jpg'),
             'due_date' => $this->client->due_date,
             'member_of' => $this->client->created_at->format('d/m/y'),
         ];
