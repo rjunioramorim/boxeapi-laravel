@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\UpdateProfileRequest;
+use App\Http\Resources\Clients\ProfileResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -15,36 +16,22 @@ class UpdateProfileController extends Controller
      */
     public function __invoke(UpdateProfileRequest $request)
     {
-        // $image = $request->image;
-
-        // $name = Str::uuid();
-
-        // $userId  = auth()->user()->id;
-        // $path = $userId.'/'.$name.'.'.$image->extension();
-        
-        // $request->image->storeAs('public/avatar', $path);
         $avatarUrl = auth()->user()->avatar_url;
         if ($avatarUrl != null && $avatarUrl != 'images/avatar_default.jpg') {
-            Storage::delete('avatars/' . auth()->user()->avatar_url);
+            // dd(auth()->user()->avatar_url);
+            Storage::delete('public/avatars/'.auth()->user()->avatar_url);
         }
         
-        // Fazer upload do novo avatar
+        $fileName = time() . '.' . $request->avatar_url->extension();
         
-        $avatarName = time() . '.' . $request->avatar_url->extension();
-        
-        $request->avatar_url->storeAs('avatars', $avatarName);
+        $request->avatar_url->storeAs('avatars', $fileName, 'public');
     
-        // Atualizar o campo avatar no modelo User
-        auth()->user()->update(['avatar_url' => $avatarName]);
+        $user = auth()->user();
 
-        return response()->json(['avatar_url' => auth()->user()->avatar_url], 200);
+        // $user->update(['avatar_url' => '/storage/avatars/'.$fileName]);
+        $user->update(['avatar_url' => $fileName]);
+
+        return new ProfileResource($user);
     }
 
-    // private function deleteAvatar()
-    // {
-    //     $userId = auth()->user()->id;
-    //     $path = 'public/avatar/'.$userId;
-
-    //     if(Storage::)
-    // }
 }
