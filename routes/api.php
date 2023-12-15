@@ -10,7 +10,11 @@ use App\Http\Controllers\Api\Checkins\GetCheckinOnDayController;
 use App\Http\Controllers\Api\Checkins\ListCheckinsController;
 use App\Http\Controllers\Api\Schedules\DetailSchedulesController;
 use App\Http\Controllers\Api\Schedules\ListSchedulesController;
+use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+
 
 Route::post('/auth/session', LoginController::class);
 

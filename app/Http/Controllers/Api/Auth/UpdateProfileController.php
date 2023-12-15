@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\UpdateProfileRequest;
 use App\Http\Resources\Clients\ProfileResource;
-
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
+
 
 class UpdateProfileController extends Controller
 {
@@ -18,39 +18,26 @@ class UpdateProfileController extends Controller
      */
     public function __invoke(Request $request)
     {
-        // dd($request->file('avatar_url'));
         $avatarUrl = auth()->user()->avatar_url;
-        if ($avatarUrl != null && $avatarUrl != 'images/avatar_default.jpg') {
-            // dd(auth()->user()->avatar_url);
+        
+        if ($avatarUrl != null || $avatarUrl != 'images/avatar_default.jpg') {
             Storage::delete('public/avatars/' . auth()->user()->avatar_url);
         }
+        
+        if ($request->hasFile('avatar_url')) {
+            $image = $request->file('avatar_url');
+    
+            $fileName = uniqid('image_') . '.' . $image->getClientOriginalExtension();
 
-        // dd($request->all());
-        // dd($request->hasFile('avatar_url'));
-        // if ($request->file('avatar_url')) {
-        //     $fileName = time() . '.' . $request->avatar_url->extension();
-        // }
+             // Salva o arquivo no storage
+            $image->storeAs('public/avatars', $fileName);
+            
+            // Pode retornar o caminho do arquivo salvo se necessário
+            $user = User::where('id', auth()->user()->id)->first();         
+            $user->update(['avatar_url' => $fileName]);
 
-
-
-        // $user = auth()->user();
-
-        // $user->update(['avatar_url' => '/storage/avatars/' . $fileName]);
-        // $user->update(['avatar_url' => $fileNam);
-
-        // return new ProfileResource($user);
-        $file = $request->input('avatar_url');
-        // dd($file);
-        $bytes = base64_decode($file);
-        $image = Image::make($bytes);
-
-        // // dd('ok', $image);
-        // // dd($image);
-
-        // Storage::put('imagens/' . $image->basename(), $image->get());
-
-        // $request->avatar_url->storeAs('avatars', $image, 'public');
-        // dd($image);
-        return response()->json($image);
+            return new ProfileResource($user);
+        }
+        return response()->json(['error' => 'Nenhuma imagem enviada'], 400);
     }
 }
