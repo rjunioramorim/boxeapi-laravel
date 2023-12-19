@@ -20,7 +20,7 @@ class DetailClientScheduleResource extends JsonResource
             'status'=> $this->status,
             'isOwner' => $this->user_id == $userId,
             'name' => $this->user->name,
-            'avatar_url' => url($this->user->avatar_url),
+            'avatar_url' => asset('storage/' . $this->user->avatar_url) ?? url('avatar_default.jpg'),
         ];
     }
 }
