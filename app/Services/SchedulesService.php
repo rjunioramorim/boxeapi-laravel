@@ -34,12 +34,12 @@ class SchedulesService
 
     public function getSchedule(Schedule $schedule, string $date)
     {
-        $schedule = Schedule::with(['checkins.user'], function ($query) use ($date) {
-            return $query->where('checkins.checkin_date', $date)->where('checkins.status', '<>', 'canceled');
-        })->where('schedules.active', true)
+        $schedule = Schedule::with(['checkins' => function ($query) use ($date) {
+            $query->where('checkins.checkin_date', $date)->where('checkins.status', '<>', 'canceled');
+        }])->where('schedules.active', true)
             ->where('schedules.id', $schedule->id)
             ->first();
-
+        
         return $schedule;
     }
 }

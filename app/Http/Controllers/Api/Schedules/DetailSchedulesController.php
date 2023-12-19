@@ -21,7 +21,7 @@ class DetailSchedulesController extends Controller
     public function __invoke(Schedule $schedule, Request $request)
     {
         $response = $this->service->getSchedule($schedule, $request->day);
-
+        
         return new DetailScheduleResource($response);
     }
 }
