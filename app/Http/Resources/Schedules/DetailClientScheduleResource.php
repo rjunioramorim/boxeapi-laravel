@@ -15,8 +15,10 @@ class DetailClientScheduleResource extends JsonResource
     public function toArray(Request $request): array
     {
         $userId = auth()->user()->id;
+
+        
         return [
-            'id' => $this->id,
+            'checkin_id' => $this->id,
             'status'=> $this->status,
             'isOwner' => $this->user_id == $userId,
             'name' => $this->user->name,
